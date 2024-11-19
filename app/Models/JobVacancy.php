@@ -21,7 +21,7 @@ class JobVacancy extends Model
 
 
     public function position() {
-        return $this->belongsTo(Position::class, 'id_position');
+        return $this->belongsTo(position::class, 'id_position');
     }
 
     public function location() {
@@ -29,7 +29,7 @@ class JobVacancy extends Model
     }
 
     public function department() {
-        return $this->belongsTo(Department::class, 'id_department');
+        return $this->belongsTo(department::class, 'id_department');
     }
 
     public function applications()
