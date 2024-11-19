@@ -19,8 +19,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 Route::get('/profile', [UserController::class, 'profile'])->middleware('auth')->name('profile');
 
 // Route untuk halaman daftar pekerjaan dan detail pekerjaan
-Route::get('/', [JobController::class, 'index'])->name('job_vacancies.index');
-Route::get('/job-vacancies/{id}', [JobController::class, 'show'])->name('job_vacancies.show');
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/job-vacancies', [JobController::class, 'index'])->name('job_vacancies.index');
+Route::get('/job-vacancies/{id}', [JobController::class, 'show'])->middleware('auth')->name('job_vacancies.show');
 
 // Route untuk mengajukan lamaran
 Route::post('/job-vacancies/{id}/apply', [ApplicationController::class, 'apply'])->middleware('auth')->name('job_vacancies.apply');
