@@ -30,7 +30,7 @@ Route::get('/job-vacancies/{id}', [JobController::class, 'show'])->middleware('a
 Route::post('/job-vacancies/{id}/apply', [ApplicationController::class, 'apply'])->middleware('auth')->name('job_vacancies.apply');
 
 // Route untuk halaman admin dashboard dengan pengecekan role admin
-Route::get('/admin/dashboard', function () {
+Route::get('/admin', function () {
     if (Auth::check() && Auth::user()->role === 'admin') {
         return view('admin.dashboard');
     }

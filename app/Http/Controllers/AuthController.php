@@ -16,19 +16,47 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->only('email', 'password');
+
+    //     if (Auth::attempt($credentials)) {
+    //         $request->session()->regenerate();
+    //         return redirect()->intended("/");
+    //     }
+
+    //     return back()->withErrors([
+    //         'email' => 'The provided credentials do not match our records.',
+    //     ]);
+    // }
     public function login(Request $request)
-    {
+        {
         $credentials = $request->only('email', 'password');
 
+        // Cek apakah kredensial valid
         if (Auth::attempt($credentials)) {
+            // Regenerate session untuk keamanan
             $request->session()->regenerate();
-            return redirect()->route("job_vacancies.index");
+
+            // Redirect berdasarkan role
+            $userRole = Auth::user()->role;
+
+            if ($userRole == 'admin') {
+                return redirect('/admin'); // Redirect ke halaman admin
+            } elseif ($userRole == 'user') {
+                return redirect('/job-vacancies'); // Redirect ke halaman user
+            }
+
+            // Default redirect jika role tidak ditemukan
+            return redirect('/');
         }
 
+        // Jika login gagal, kembali ke halaman login dengan error
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
-    }
+        }
+
 
     public function showRegisterForm()
     {
