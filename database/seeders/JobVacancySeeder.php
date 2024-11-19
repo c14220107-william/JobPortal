@@ -18,6 +18,8 @@ class JobVacancySeeder extends Seeder
         $location = Location::first();
         $department = department::first();
 
+        
+
         for ($i =0;$i<5;$i++){
             JobVacancy::create([
                 'title' => 'Software Engineer',
