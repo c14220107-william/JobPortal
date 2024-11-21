@@ -13,12 +13,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('name');
+            $table->string('nomor_telepon')->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('total_lama_bekerja')->nullable();
+            $table->string('profile_picture')->nullable(); // Menyimpan gambar profil
+            $table->text('bio')->nullable(); // Deskripsi diri kandidat
+            $table->string('resume_link')->nullable();
+            $table->boolean('profile_completed')->default(false);
             $table->timestamps();
+            // $table->rememberToken();
+            // $table->timestamp('email_verified_at')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -39,12 +39,13 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // Redirect berdasarkan role
-            $userRole = Auth::user()->role;
+            $userRole = Auth::user();
 
             if ($userRole == 'admin') {
                 return redirect('/admin'); // Redirect ke halaman admin
-            } elseif ($userRole == 'user') {
-                return redirect('/job-vacancies'); // Redirect ke halaman user
+            } 
+            if (!$userRole->profile_completed) {
+                return redirect('/profile-create'); // Redirect ke halaman user
             }
 
             // Default redirect jika role tidak ditemukan
@@ -64,36 +65,82 @@ class AuthController extends Controller
     }
 
     public function register(Request $request)
-{
-    // Validasi input
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:4|confirmed',
-    ]);
+    {
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:4|confirmed',
+        ]);
+        
+
     
 
-   
+        $role = 'user';  // Default role adalah 'user'
+        if (strpos($request->email, '@hrdcompany.com') !== false) {
+            $role = 'admin';  // Jika email mengandung '@hrdcompany.com', set role sebagai 'admin'
+        }
 
-    $role = 'user';  // Default role adalah 'user'
-    if (strpos($request->email, '@hrdcompany.com') !== false) {
-        $role = 'admin';  // Jika email mengandung '@hrdcompany.com', set role sebagai 'admin'
+        
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $role,
+            'profile_completed' => false, // Set role sesuai dengan domain email
+        ]);
+
+    
+    
+
+        // Arahkan ke halaman login setelah registrasi
+        return redirect()->route('login')->with('success', 'Registration successful. Please login.');
     }
 
-    
-    User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => $role, // Set role sesuai dengan domain email
+    public function store(Request $request){
+        // Validasi input data
+    $validatedData = $request->validate([
+        'nomor_telepon' => 'required|string|max:15',
+        'tanggal_lahir' => 'required|date',
+        'alamat' => 'required|string|max:255',
+        'total_lama_bekerja' => 'required|string|max:50',
+        'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'bio' => 'nullable|string',
+        'resume_link' => 'nullable|file|mimes:pdf|max:2048',
     ]);
 
-   
-   
+    
+    // Proses upload gambar profil
+    if ($request->hasFile('profile_picture')) {
+        $validatedData['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+    }
 
-    // Arahkan ke halaman login setelah registrasi
-    return redirect()->route('login')->with('success', 'Registration successful. Please login.');
-}
+    // Proses upload resume
+    if ($request->hasFile('resume_link')) {
+        $validatedData['resume_link'] = $request->file('resume_link')->store('resumes', 'public');
+    }
+
+    // Simpan data ke database
+    $user = User::create([
+        'nomor_telepon' => $validatedData['nomor_telepon'],
+        'tanggal_lahir' => $validatedData['tanggal_lahir'],
+        'alamat' => $validatedData['alamat'],
+        'total_lama_bekerja' => $validatedData['total_lama_bekerja'],
+        'profile_picture' => $validatedData['profile_picture'] ?? null,
+        'bio' => $validatedData['bio'] ?? null,
+        'resume_link' => $validatedData['resume_link'] ?? null,
+    ]);
+
+    return response()->json([
+        'message' => 'User berhasil disimpan',
+        'user' => $user,
+    ]);
+
+    }
+    public function Profil($id){
+        
+
+    }
 
 
     public function logout(Request $request)

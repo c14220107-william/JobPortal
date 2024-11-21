@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('status');
             $table->string('resume_link')->nullable();
             $table->text('cover_letter')->nullable();
+            $table->foreignId('reviewed_by')->nullable()->constrained('users')->onDelete('set null'); // Menandakan siapa yang meninjau
+            $table->date('interview_date')->nullable(); // Tanggal wawancara
+            $table->text('interview_notes')->nullable(); // Catatan wawancara
+            $table->string('final_status')->nullable();
             $table->timestamps();
         });
     }

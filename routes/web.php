@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\NotificationController;
+
 // Route untuk login dan register
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -16,15 +18,24 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Route untuk halaman profil pengguna
-Route::get('/profile', [UserController::class, 'profile'])->middleware('auth')->name('profile');
+
 
 // Route untuk halaman daftar pekerjaan dan detail pekerjaan
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/job-vacancies', [JobController::class, 'index'])->name('job_vacancies.index');
+Route::get('/job-vacancies', [JobController::class, 'index'])->middleware('auth')->name('job_vacancies.index');
 Route::get('/job-vacancies/{id}', [JobController::class, 'show'])->middleware('auth')->name('job_vacancies.show');
+
+Route::get('/profile', [UserController::class, 'profile'])->middleware('auth')->name('profile');
+Route::get('/profile-create', [UserController::class, 'editProfile'])->name('profile.create');
+Route::post('/profile-create', [UserController::class, 'store'])->name('profile.store');
+
+
+
+
+
 
 // Route untuk mengajukan lamaran
 Route::post('/job-vacancies/{id}/apply', [ApplicationController::class, 'apply'])->middleware('auth')->name('job_vacancies.apply');
@@ -50,6 +61,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/applications', [ApplicationController::class, 'index'])->name('admin.applications.index');
     Route::get('/admin/applications/{id}', [ApplicationController::class, 'show'])->name('admin.applications.show');
     Route::delete('/admin/applications/{id}', [ApplicationController::class, 'destroy'])->name('admin.applications.destroy');
+
+    // // Route untuk memperbarui status aplikasi dan mengirimkan notifikasi
+    // Route::put('/admin/applications/{id}/status', [ApplicationController::class, 'updateStatus'])->name('admin.applications.updateStatus');
+    // Route::post('/admin/applications/{id}/send-notification', [NotificationController::class, 'sendNotification'])->name('admin.applications.sendNotification');
+
 });
 
 

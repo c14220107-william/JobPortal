@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('id_position')->constrained('positions');
             $table->foreignId('id_location')->constrained('locations');
             $table->foreignId('id_department')->constrained('departments');
+            $table->string('vacancy_type')->nullable();
             $table->text('requirement')->nullable();
             $table->text('description')->nullable();
             $table->text('benefit')->nullable();

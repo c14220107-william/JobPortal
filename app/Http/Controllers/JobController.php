@@ -68,4 +68,10 @@ class JobController extends Controller
         JobVacancy::destroy($id);
         return redirect()->route('admin.job_vacancies.index');
     }
+    public function closeJobVacancy($id)
+    {
+        JobVacancy::where('id', $id)->update(['is_active' => false]);
+        return redirect()->route('admin.job_vacancies.index')->with('success', 'Job vacancy closed successfully.');
+    }
+
 }
