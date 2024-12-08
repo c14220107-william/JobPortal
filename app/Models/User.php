@@ -9,32 +9,32 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    
-
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
         'nomor_telepon',
+        'tempat_lahir',
         'tanggal_lahir',
         'alamat',
+        'jenjang_pendidikan',
+        'asal_universitas',
+        'pekerjaan_terakhir',
         'total_lama_bekerja',
         'profile_picture',
         'bio',
         'resume_link',
         'profile_completed',
     ];
- 
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -46,17 +46,21 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast to native types.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'profile_completed' => 'boolean', // Tambahkan tipe boolean
+    ];
+
+    /**
+     * Relationship with Application model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function applications()
     {
         return $this->hasMany(Application::class, 'user_id');

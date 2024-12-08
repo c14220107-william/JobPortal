@@ -15,6 +15,12 @@ class locationSeeder extends Seeder
     {
         Location::create(['name' => 'Jakarta']);
         Location::create(['name' => 'Surabaya']);
-        Location::create(['name' => 'Bandung']);
+        Location::create(['name' => 'Bali']);
+        Location::create(['name' => 'Semarang']);
+        Location::create(['name' => 'Tangerang']);
+        Location::create(['name' => 'Jayapura']);
+        Location::create(['name' => 'Medan']);
+
+
     }
 }

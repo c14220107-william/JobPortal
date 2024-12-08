@@ -16,5 +16,11 @@ class AdminController extends Controller
         return view('admin.dashboard'); // Tampilkan dashboard jika admin
     }
 
+    public function profile()
+    {
+        $admin = Auth::user(); // Mendapatkan data pengguna yang sedang login
+        return view('admin.profile.index', compact('admin'));
+    }
+
 }
 

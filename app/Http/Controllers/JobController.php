@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+    
+    
     public function index()
     {
         $jobVacancies = JobVacancy::with(['position', 'location', 'department'])->get();
@@ -53,15 +55,34 @@ class JobController extends Controller
     public function edit($id)
     {
         $jobVacancy = JobVacancy::findOrFail($id);
-        return view('admin.job_vacancies.edit', compact('jobVacancy'));
+        $positions = position::all();
+        $locations = Location::all();
+        $departments = department::all();
+
+        return view('admin.job_vacancies.edit', compact('jobVacancy', 'positions', 'locations', 'departments'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'id_position' => 'required|exists:positions,id',
+            'id_location' => 'required|exists:locations,id',
+            'id_department' => 'required|exists:departments,id',
+            'requirement' => 'required|string',
+            'description' => 'required|string',
+            'benefit' => 'required|string',
+            'available_from_date' => 'required|date',
+            'available_to_date' => 'required|date',
+            'kebutuhan' => 'required|integer|min:1',
+        ]);
+
         $jobVacancy = JobVacancy::findOrFail($id);
-        $jobVacancy->update($request->all());
-        return redirect()->route('admin.job_vacancies.index');
+        $jobVacancy->update($validated);
+
+        return redirect()->route('admin.job_vacancies.index')->with('success', 'Lowongan berhasil diperbarui.');
     }
+
 
     public function destroy($id)
     {
@@ -73,5 +94,12 @@ class JobController extends Controller
         JobVacancy::where('id', $id)->update(['is_active' => false]);
         return redirect()->route('admin.job_vacancies.index')->with('success', 'Job vacancy closed successfully.');
     }
+    public function showIndex($id)
+    {
+        $jobVacancy = JobVacancy::with(['position', 'location', 'department'])->findOrFail($id);
+        return view('admin.job_vacancies.show', compact('jobVacancy'));
+    }
+
+    
 
 }

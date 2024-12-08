@@ -26,12 +26,12 @@ class ApplicationController extends Controller
         $application->status = "pending";
         $application->save();
 
-        // Kirimkan notifikasi kepada admin dan kandidat
-        $admin = User::where('role', 'admin')->first();  // Mengambil user dengan role admin
-        $user = User::where('role','user')->first();
-        Notification::send($admin, new ApplicationStatusUpdate($application)); // Notifikasi ke admin
-        // Kirim notifikasi ke kandidat
-        Notification::send($user, new ApplicationStatusUpdate($application));
+        // // Kirimkan notifikasi kepada admin dan kandidat
+        // $admin = User::where('role', 'admin')->first();  // Mengambil user dengan role admin
+        // $user = User::where('role','user')->first();
+        // Notification::send($admin, new ApplicationStatusUpdate($application)); // Notifikasi ke admin
+        // // Kirim notifikasi ke kandidat
+        // Notification::send($user, new ApplicationStatusUpdate($application));
 
 
 
@@ -58,7 +58,7 @@ class ApplicationController extends Controller
 
         // Kirim notifikasi ke kandidat
         $user = User::find($application->user_id);
-        Notification::send($user, new ApplicationStatusUpdate($application)); // Notifikasi ke kandidat
+        // Notification::send($user, new ApplicationStatusUpdate($application)); // Notifikasi ke kandidat
 
         return redirect()->route('admin.applications.index')->with('success', 'Application status updated.');
     }

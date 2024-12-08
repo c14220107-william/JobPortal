@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('job_vacancies', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('code');
             $table->foreignId('id_position')->constrained('positions');
             $table->foreignId('id_location')->constrained('locations');
             $table->foreignId('id_department')->constrained('departments');
@@ -29,7 +28,6 @@ return new class extends Migration
             $table->dateTime('created_date')->useCurrent();
             $table->dateTime('updated_date')->nullable();
             $table->integer('kebutuhan')->nullable();
-            $table->string('url_jobstreet')->nullable();
             $table->integer('count')->default(0);
             $table->timestamps();
         });

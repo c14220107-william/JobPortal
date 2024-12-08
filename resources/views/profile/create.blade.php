@@ -20,6 +20,10 @@
             <input type="text" name="nomor_telepon" id="nomor_telepon" class="w-full p-2 border border-gray-300 rounded mt-2" required>
         </div>
         <div class="mb-4">
+            <label for="tempat_lahir" class="block text-gray-700 font-semibold">Tempat Lahir</label>
+            <input type="text" name="tempat_lahir" id="tempat_lahir" class="w-full p-2 border border-gray-300 rounded mt-2" required>
+        </div>
+        <div class="mb-4">
             <label for="tanggal_lahir" class="block text-gray-700 font-semibold">Tanggal Lahir</label>
             <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="w-full p-2 border border-gray-300 rounded mt-2" required>
         </div>
@@ -28,11 +32,33 @@
             <input type="text" name="alamat" id="alamat" class="w-full p-2 border border-gray-300 rounded mt-2" required>
         </div>
         <div class="mb-4">
-            <label for="total_lama_bekerja" class="block text-gray-700 font-semibold">Total Lama Bekerja</label>
-            <input type="text" name="total_lama_bekerja" id="total_lama_bekerja" class="w-full p-2 border border-gray-300 rounded mt-2" required>
+            <label for="jenjang_pendidikan" class="block text-gray-700 font-semibold">Jenjang Pendidikan</label>
+            <select id="jenjang_pendidikan" name="jenjang_pendidikan" class="w-full p-2 border border-gray-300 p-2 rounded" required>
+                <option value="" disabled selected>Pilih Jenjang</option>
+                <option value="SD">SD</option>
+                <option value="SMP">SMP</option>
+                <option value="SMA">SMA</option>
+                <option value="D3">D3</option>
+                <option value="D4">D2</option>
+                <option value="S1">S1</option>
+                <option value="S2">S2</option>
+                <option value="S3">S3</option>
+            </select>
         </div>
         <div class="mb-4">
-            <label for="profile_picture" class="block text-gray-700 font-semibold">Foto Profil</label>
+            <label for="asal_universitas" class="block text-gray-700 font-semibold">Asal Universitas</label>
+            <input type="text" name="asal_universitas" id="asal_universitas" class="w-full p-2 border border-gray-300 rounded mt-2" >
+        </div>
+        <div class="mb-4">
+            <label for="pekerjaan_terakhir" class="block text-gray-700 font-semibold">Pekerjaan Terakhir</label>
+            <input type="text" name="pekerjaan_terakhir" id="pekerjaan_terakhir" class="w-full p-2 border border-gray-300 rounded mt-2" >
+        </div>
+        <div class="mb-4">
+            <label for="total_lama_bekerja" class="block text-gray-700 font-semibold">Total Lama Bekerja</label>
+            <input type="text" name="total_lama_bekerja" id="total_lama_bekerja" class="w-full p-2 border border-gray-300 rounded mt-2">
+        </div>
+        <div class="mb-4">
+            <label for="profile_picture" class="block text-gray-700 font-semibold">Foto</label>
             <input type="file" name="profile_picture" id="profile_picture" class="w-full p-2 border border-gray-300 rounded mt-2" accept="image/*">
         </div>
         <div class="mb-4">
@@ -40,7 +66,7 @@
             <textarea name="bio" id="bio" class="w-full p-2 border border-gray-300 rounded mt-2" rows="5"></textarea>
         </div>
         <div class="mb-4">
-            <label for="resume_link" class="block text-gray-700 font-semibold">Resume</label>
+            <label for="resume_link" class="block text-gray-700 font-semibold">Resume (PDF ONLY)</label>
             <input type="file" name="resume_link" id="resume_link" class="w-full p-2 border border-gray-300 rounded mt-2" accept=".pdf">
         </div>
         <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Simpan</button>

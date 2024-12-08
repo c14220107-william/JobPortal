@@ -33,9 +33,13 @@ class UserController extends Controller
             // Validasi input data
             $validatedData = $request->validate([
                 'nomor_telepon' => 'required|string|max:15',
+                'tempat_lahir' => 'required|string|max:255',
                 'tanggal_lahir' => 'required|date',
                 'alamat' => 'required|string|max:255',
                 'total_lama_bekerja' => 'required|string|max:50',
+                'asal_universitas' => 'required|string|max:50',
+                'jenjang_pendidikan' => 'required|string|max:50',
+                'pekerjaan_terakhir' => 'required|string|max:255',
                 'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
                 'bio' => 'nullable|string',
                 'resume_link' => 'nullable|file|mimes:pdf|max:2048',
@@ -60,9 +64,13 @@ class UserController extends Controller
             // Simpan data ke database
             $user->update([
                 'nomor_telepon' => $validatedData['nomor_telepon'],
+                'tempat_lahir' => $validatedData['tempat_lahir'],
                 'tanggal_lahir' => $validatedData['tanggal_lahir'],
                 'alamat' => $validatedData['alamat'],
-                'total_lama_bekerja' => $validatedData['total_lama_bekerja'],
+                'jenjang_pendidikan' => $validatedData['jenjang_pendidikan'],
+                'asal_universitas' => $validatedData['asal_universitas'],
+                'pekerjaan_terakhir' => $validatedData['pekerjaan_terakhir'] ?? null,
+                'total_lama_bekerja' => $validatedData['total_lama_bekerja'] ?? null,
                 'profile_picture' => $validatedData['profile_picture'] ?? null,
                 'bio' => $validatedData['bio'] ?? null,
                 'resume_link' => $validatedData['resume_link'] ?? null,

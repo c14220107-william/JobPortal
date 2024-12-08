@@ -40,17 +40,20 @@ Route::post('/profile-create', [UserController::class, 'store'])->name('profile.
 // Route untuk mengajukan lamaran
 Route::post('/job-vacancies/{id}/apply', [ApplicationController::class, 'apply'])->middleware('auth')->name('job_vacancies.apply');
 
-// Route untuk halaman admin dashboard dengan pengecekan role admin
-Route::get('/admin', function () {
-    if (Auth::check() && Auth::user()->role === 'admin') {
-        return view('admin.dashboard');
-    }
-    abort(403, 'Unauthorized');
-})->middleware('auth')->name('admin.dashboard');
+// // Route untuk halaman admin dashboard dengan pengecekan role admin
+// Route::get('/admin', function () {
+//     if (Auth::check() && Auth::user()->role === 'admin') {
+//         return view('admin.dashboard');
+//     }
+//     abort(403, 'Unauthorized');
+// })->middleware('auth')->name('admin.dashboard');
 
 // Route untuk manajemen pekerjaan di admin
 Route::middleware('auth')->group(function () {
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/job_vacancies', [JobController::class, 'adminIndex'])->name('admin.job_vacancies.index');
+    Route::get('/admin/job_vacancies/detail/{id}', [JobController::class, 'showIndex'])->name('admin.job_vacancies.show');
     Route::get('/admin/job_vacancies/create', [JobController::class, 'create'])->name('admin.job_vacancies.create');
     Route::post('/admin/job-vacancies', [JobController::class, 'store'])->name('admin.job_vacancies.store');
     Route::get('/admin/job-vacancies/{id}/edit', [JobController::class, 'edit'])->name('admin.job_vacancies.edit');
@@ -61,6 +64,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/applications', [ApplicationController::class, 'index'])->name('admin.applications.index');
     Route::get('/admin/applications/{id}', [ApplicationController::class, 'show'])->name('admin.applications.show');
     Route::delete('/admin/applications/{id}', [ApplicationController::class, 'destroy'])->name('admin.applications.destroy');
+    
+    Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile.index');
+    
+
+    
+
 
     // // Route untuk memperbarui status aplikasi dan mengirimkan notifikasi
     // Route::put('/admin/applications/{id}/status', [ApplicationController::class, 'updateStatus'])->name('admin.applications.updateStatus');

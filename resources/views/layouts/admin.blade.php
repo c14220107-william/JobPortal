@@ -17,6 +17,7 @@
                     <a href="{{ route('admin.dashboard') }}" class="hover:underline">Dashboard</a>
                     <a href="{{ route('admin.job_vacancies.index') }}" class="hover:underline">Manage Jobs</a>
                     <a href="{{ route('admin.applications.index') }}" class="hover:underline">Applications</a>
+                    <a href="{{ route('admin.profile.index') }}" class="hover:underline">Profile</a>
                     <a href="{{ route('logout') }}" 
                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
                        class="hover:underline text-red-400">Logout</a>

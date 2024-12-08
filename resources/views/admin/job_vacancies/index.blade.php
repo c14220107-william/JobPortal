@@ -10,7 +10,7 @@
         <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
             <thead class="bg-gray-200 text-gray-600">
                 <tr>
-                    <th class="py-3 px-6 text-left">Judul</th>
+                    <th class="py-3 px-6 text-left">Posisi</th>
                     <th class="py-3 px-6 text-left">Lokasi</th>
                     <th class="py-3 px-6 text-left">Departemen</th>
                     <th class="py-3 px-6 text-left">Status</th>
@@ -23,9 +23,10 @@
                     <td class="py-3 px-6">{{ $job->title }}</td>
                     <td class="py-3 px-6">{{ $job->location->name }}</td>
                     <td class="py-3 px-6">{{ $job->department->name  }}</td>
-                    <td class="py-3 px-6">{{ $job->is_open ? 'Dibuka' : 'Ditutup' }}</td>
+                    <td class="py-3 px-6">{{ $job->is_active ? 'Dibuka' : 'Ditutup' }}</td>
                     <td class="py-3 px-6 text-center">
                         <div class="flex justify-center space-x-2">
+                            <a href="{{ route('admin.job_vacancies.show', $job->id) }}" class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-yellow-600">Detail</a>
                             <a href="{{ route('admin.job_vacancies.edit', $job->id) }}" class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600">Edit</a>
                             <form action="{{ route('admin.job_vacancies.destroy', $job->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pekerjaan ini?');">
                                 @csrf

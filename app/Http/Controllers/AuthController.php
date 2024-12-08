@@ -31,32 +31,33 @@ class AuthController extends Controller
     // }
     public function login(Request $request)
         {
-        $credentials = $request->only('email', 'password');
+            $credentials = $request->only('email', 'password');
 
-        // Cek apakah kredensial valid
-        if (Auth::attempt($credentials)) {
-            // Regenerate session untuk keamanan
-            $request->session()->regenerate();
+            // Cek apakah kredensial valid
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+                
+                /** @var \App\Models\User $userRole */
+                $userRole = Auth::user(); // Pastikan ini adalah instance User
 
-            // Redirect berdasarkan role
-            $userRole = Auth::user();
+                if ($userRole->role === 'admin') {
+                    $userRole->profile_completed = true; // Tandai profile_completed
+                    $userRole->save(); // Simpan perubahan
+                    return redirect('/admin/dashboard');
+                }
 
-            if ($userRole == 'admin') {
-                return redirect('/admin'); // Redirect ke halaman admin
-            } 
-            if (!$userRole->profile_completed) {
-                return redirect('/profile-create'); // Redirect ke halaman user
+                if (!$userRole->profile_completed) {
+                    return redirect('/profile-create');
+                }
+
+                return redirect('/');
             }
 
-            // Default redirect jika role tidak ditemukan
-            return redirect('/');
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ]);
         }
 
-        // Jika login gagal, kembali ke halaman login dengan error
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
-        }
 
 
     public function showRegisterForm()

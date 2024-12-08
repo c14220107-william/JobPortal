@@ -23,7 +23,6 @@ class JobVacancySeeder extends Seeder
         for ($i =0;$i<5;$i++){
             JobVacancy::create([
                 'title' => 'Software Engineer',
-                'code' => 'SE123',
                 'id_position' => $position->id, // ID position yang ada di database
                 'id_location' => $location->id, // ID location yang ada di database
                 'id_department' => $department->id, // ID department yang ada di database
@@ -37,7 +36,6 @@ class JobVacancySeeder extends Seeder
                 'created_date' => now(),
                 'updated_date' => now(),
                 'kebutuhan' => 3,
-                'url_jobstreet' => 'https://jobstreet.com/software-engineer',
                 'count' => 0,
             ]);
 

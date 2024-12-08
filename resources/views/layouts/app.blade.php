@@ -16,8 +16,8 @@
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a class="text-xl font-bold text-gray-800 hover:text-gray-700" href="/">Job Portal</a>
             <div class="flex items-center space-x-4">
-                @if (Route::currentRouteName() == 'job_vacancies.index')
                     @if (Auth::check())
+                        <a class="text-gray-600 hover:text-gray-900" href="{{ route('job_vacancies.index') }}">Job</a>
                         <a class="text-gray-600 hover:text-gray-900" href="{{ route('profile') }}">Profile</a>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
@@ -27,7 +27,7 @@
                         <a class="text-gray-600 hover:text-gray-900" href="{{ route('login') }}">Login</a>
                         <a class="text-gray-600 hover:text-gray-900" href="{{ route('register') }}">Register</a>
                     @endif
-                @endif
+                
             </div>
         </div>
     </nav>
