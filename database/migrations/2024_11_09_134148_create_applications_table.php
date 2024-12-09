@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('interview_date')->nullable(); // Tanggal wawancara
             $table->text('interview_notes')->nullable(); // Catatan wawancara
             $table->string('final_status')->nullable();
+            $table->boolean('apply_status')->default(false);
             $table->timestamps();
         });
     }

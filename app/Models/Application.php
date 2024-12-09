@@ -13,7 +13,7 @@ class Application extends Model
         'user_id', 
         'job_vacancies_id', 
         'cover_letter',
-        'application_date','resume_link', 'status', 'resume_link'
+        'application_date','resume_link', 'status', 'resume_link','apply_status'
     ];
 
     // Relasi ke model User
