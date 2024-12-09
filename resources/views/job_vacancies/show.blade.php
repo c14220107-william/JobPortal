@@ -26,9 +26,15 @@
                     <label for="resume_link" class="block text-gray-700 text-sm font-bold mb-2">Cover Letter (optional):</label>
                     <textarea name="resume_link" id="resume_link" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4"></textarea>
                 </div>
+                @if ($application)
+                    <p class="text-red-600">Anda Sudah Melamar</p>
+                    
+                @else
                 <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
                     Apply for this job
                 </button>
+                @endif
+                    
             </form>
         @elseif (Auth::check() && Auth::user()->role === 'admin')
             <div class="bg-gray-100 p-4 rounded-lg mb-6">

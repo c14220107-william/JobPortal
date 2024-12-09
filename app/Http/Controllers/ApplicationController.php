@@ -24,6 +24,7 @@ class ApplicationController extends Controller
         $application->resume_link = $request->resume_link;
         $application->application_date = now();
         $application->status = "pending";
+        $application->apply_status = true;
         $application->save();
 
         // // Kirimkan notifikasi kepada admin dan kandidat

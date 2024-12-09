@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
 use App\Models\department;
 use App\Models\JobVacancy;
 use App\Models\Location;
@@ -20,9 +21,13 @@ class JobController extends Controller
 
     public function show($id)
     {
-        $jobVacancy = JobVacancy::findOrFail($id);
-        return view('job_vacancies.show', compact('jobVacancy'));
+        $jobVacancy = JobVacancy::findOrFail($id); // Ambil data job vacancy berdasarkan ID
+        $application = Application::where('job_vacancies_id', $id) // Filter berdasarkan job vacancy ID
+                                    ->where('user_id', auth()->id()) // Filter berdasarkan ID pengguna yang sedang login
+                                    ->first(); // Ambil hanya satu aplikasi jika ada
+        return view('job_vacancies.show', compact('jobVacancy', 'application'));
     }
+
 
     public function adminIndex()
     {
