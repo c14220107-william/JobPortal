@@ -40,9 +40,9 @@ class UserController extends Controller
                 'asal_universitas' => 'required|string|max:50',
                 'jenjang_pendidikan' => 'required|string|max:50',
                 'pekerjaan_terakhir' => 'required|string|max:255',
-                'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
                 'bio' => 'nullable|string',
-                'resume_link' => 'nullable|file|mimes:pdf|max:2048',
+                'resume_link' => 'nullable|file|mimes:pdf|max:10240',
             ]);
 
             // // Debug 2: Data setelah validasi
