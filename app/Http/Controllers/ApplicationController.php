@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ApplicationStatusUpdate;
+use Aws\Sns\SnsClient;
+
 
 class ApplicationController extends Controller
 {
@@ -27,12 +29,38 @@ class ApplicationController extends Controller
         $application->apply_status = true;
         $application->save();
 
-        // // Kirimkan notifikasi kepada admin dan kandidat
-        // $admin = User::where('role', 'admin')->first();  // Mengambil user dengan role admin
-        // $user = User::where('role','user')->first();
-        // Notification::send($admin, new ApplicationStatusUpdate($application)); // Notifikasi ke admin
-        // // Kirim notifikasi ke kandidat
-        // Notification::send($user, new ApplicationStatusUpdate($application));
+
+
+        // Kirim notifikasi menggunakan SNS
+        $jobVacancy = JobVacancy::findOrFail($id);
+        $adminEmails = User::where('role', 'admin')->pluck('email')->toArray(); // Dapatkan email admin
+        
+        $snsClient = new SnsClient([
+            'region' => env('AWS_DEFAULT_REGION'),
+            'version' => 'latest',
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                'token' => env('AWS_SESSION_TOKEN')
+            ],
+        ]);
+
+        $message = sprintf(
+            "New job application received.\n\nJob Title: %s\nUser: %s\nDate: %s\nCheck Now at http://3.88.74.22/",
+            $jobVacancy->title,
+            Auth::user()->name,
+            now()->toDateTimeString()
+        );
+
+        foreach ($adminEmails as $email) {
+            $snsClient->publish([
+                'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+                'Message' => $message,
+                'Subject' => 'New Job Application',
+            ]);
+        }
+
+    
 
 
 

@@ -78,7 +78,7 @@ class AuthController extends Controller
     
 
         $role = 'user';  // Default role adalah 'user'
-        if (strpos($request->email, '@hrdcompany.com') !== false) {
+        if (strpos($request->email, '@john.petra.ac.id') !== false) {
             $role = 'admin';  // Jika email mengandung '@hrdcompany.com', set role sebagai 'admin'
         }
 
