@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ApplicationStatusUpdate extends Notification
+class ApplicationStatusUpdated extends Notification
 {
     use Queueable;
 

@@ -66,6 +66,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/applications/{id}', [ApplicationController::class, 'destroy'])->name('admin.applications.destroy');
     
     Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile.index');
+    Route::get('/admin/profile/edit', [AdminController::class, 'editProfile'])->name('admin.profile.edit');
+    Route::put('/admin/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
     
 
     
