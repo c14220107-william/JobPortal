@@ -20,7 +20,7 @@
             <p><strong>Total Lama Bekerja:</strong> {{ $application->user->total_lama_bekerja }}</p>
             <p><strong>Bio:</strong> {{ $application->user->bio }}</p>
             <p><strong>Resume Link:</strong> 
-                <a href="{{asset('storage/' . $application->user->resume_link) }}" target="_blank" class="text-blue-500 underline">
+                <a href="{{Storage::disk('s3')->url($application->user->resume_link) }}" target="_blank" class="text-blue-500 underline">
                     Download Resume
                 </a>
             </p>
@@ -31,8 +31,8 @@
         <div class="mb-4">
             <h2 class="text-xl font-semibold mb-2">Foto</h2>
             @if ($application->user->profile_picture)
-                <a href="{{ asset('storage/' . $application->user->profile_picture) }}" target="_blank">
-                    <img src="{{ asset('storage/' . $application->user->profile_picture) }}" alt="Profile Picture" class="w-64 h-64 square-full">
+                <a href="{{ Storage::disk('s3')->url($application->user->profile_picture) }}" target="_blank">
+                    <img src="{{ Storage::disk('s3')->url($application->user->profile_picture) }}" alt="Profile Picture" class="w-64 h-64 square-full">
                 </a>
                 
             @else

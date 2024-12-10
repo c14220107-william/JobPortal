@@ -50,12 +50,15 @@ class UserController extends Controller
 
             // Proses upload gambar profil
             if ($request->hasFile('profile_picture')) {
-                $validatedData['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+                // $validatedData['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+                $validatedData['profile_picture'] = $request->file('profile_picture')->store('uploads/profile_pictures', 's3','public');
+                
             }
 
             // Proses upload resume
             if ($request->hasFile('resume_link')) {
-                $validatedData['resume_link'] = $request->file('resume_link')->store('resumes', 'public');
+                // $validatedData['resume_link'] = $request->file('resume_link')->store('resumes', 'public');
+                $validatedData['resume_link'] = $request->file('resume_link')->store('uploads/resumes', 's3','public');
             }
 
             // // Debug 3: Data sebelum update ke database
