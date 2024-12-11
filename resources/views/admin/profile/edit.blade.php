@@ -49,7 +49,7 @@
                     <div class="relative w-40 h-40 rounded-full border-4 border-white overflow-hidden bg-white shadow-lg group">
                         <div class="w-full h-full">
                             @if($admin->profile_picture)
-                                <img src="{{ asset('storage/' . $admin->profile_picture) }}" 
+                                <img src="{{Storage::disk('s3')->url($admin->profile_picture)}}" 
                                      alt="Profile Picture" 
                                      class="w-full h-full object-cover">
                             @else

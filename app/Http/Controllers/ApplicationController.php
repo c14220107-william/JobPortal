@@ -58,12 +58,50 @@ class ApplicationController extends Controller
                 'Message' => $message,
                 'Subject' => 'New Job Application',
             ]);
-
             // Menambahkan email admin ke subscription SNS jika belum ada
             $this->addEmailToSubscription($snsClient, $email);
         }
 
         return redirect()->route('job_vacancies.index')->with('success', 'Your application has been submitted.');
+    }
+
+    /**
+     * Menambahkan email ke subscription SNS jika belum ada
+     *
+     * @param \Aws\Sns\SnsClient $snsClient
+     * @param string $email
+     */
+    private function addEmailToSubscription(SnsClient $snsClient, string $email)
+    {
+        try {
+            // Cek apakah email sudah terdaftar sebagai subscription
+            $result = $snsClient->listSubscriptionsByTopic([
+                'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+            ]);
+
+
+            $existingSubscriptions = $result['Subscriptions'];
+            $emailExists = false;
+
+            // Periksa apakah email sudah terdaftar
+            foreach ($existingSubscriptions as $subscription) {
+                if ($subscription['Endpoint'] === $email) {
+                    $emailExists = true;
+                    break;
+                }
+            }
+
+            // Jika email belum terdaftar, tambahkan sebagai subscription
+            if (!$emailExists) {
+                $snsClient->subscribe([
+                    'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+                    'Protocol' => 'email', // Menggunakan email sebagai protocol
+                    'Endpoint' => $email, // Email yang akan ditambahkan
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to add email to SNS subscription: ' . $e->getMessage());
+        }
     }
 
     public function index(Request $request)
@@ -89,6 +127,7 @@ class ApplicationController extends Controller
         return redirect()->route('admin.applications.index')->with('success', 'Application status updated.');
     }
 
+
     public function myApplications(Request $request)
 {
     // Ambil aplikasi pekerjaan berdasarkan user yang sedang login
@@ -105,4 +144,25 @@ class ApplicationController extends Controller
     // Kirim data ke view
     return view('applications.myApplications', compact('applications'));
 }
+
+    public function accept(Request $request, $id)
+    {
+        $application = Application::findOrFail($id);
+        $application->status = "Accepted";
+        $application->save();
+    
+        return redirect()->route('admin.applications.index')->with('status', 'Aplikasi diterima');
+    }
+    
+    public function reject(Request $request, $id)
+    {
+        $application = Application::findOrFail($id);
+        $application->status = "Rejected";
+        $application->save();
+    
+        return redirect()->route('admin.applications.index')->with('status', 'Aplikasi ditolak');
+    }
+    
+
+
 }
