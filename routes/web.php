@@ -66,8 +66,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/applications', [ApplicationController::class, 'index'])->name('admin.applications.index');
     Route::get('/admin/applications/{id}', [ApplicationController::class, 'show'])->name('admin.applications.show');
     Route::delete('/admin/applications/{id}', [ApplicationController::class, 'destroy'])->name('admin.applications.destroy');
-    Route::put('/admin/applications/{id}/accept', [ApplicationController::class, 'accept'])->name('admin.applications.accept');
-    Route::put('/admin/applications/{id}/reject', [ApplicationController::class, 'reject'])->name('admin.applications.reject');
 
 
     
