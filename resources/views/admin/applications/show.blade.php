@@ -53,9 +53,27 @@
             <p class="border-l-4 border-blue-500 pl-4 text-gray-700">{{ $application->cover_letter }}</p>
         </div>
 
-        <a href="{{ route('admin.applications.index') }}" class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+        <a href="{{ route('admin.applications.index')}}" class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
             Kembali ke Daftar Aplikasi
         </a>
+
+        <!-- Tombol Terima -->
+        <form action="{{ route('admin.applications.accept', $application->id) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="inline-block bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+                Terima
+            </button>
+        </form>
+
+        <!-- Tombol Tolak -->
+        <form action="{{ route('admin.applications.reject', $application->id) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="inline-block bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+                Tolak
+            </button>
+        </form>
     </div>
 </div>
 

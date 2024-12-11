@@ -27,7 +27,7 @@ class ApplicationController extends Controller
         $application->job_vacancies_id = $id;
         $application->resume_link = $request->resume_link;
         $application->application_date = now();
-        $application->status = "pending";
+        $application->status = "on_process";
         $application->apply_status = true;
         $application->save();
 
@@ -122,10 +122,29 @@ class ApplicationController extends Controller
         $application->status = $request->status;
         $application->save();
 
-        // Kirim notifikasi ke kandidat
-        $user = User::find($application->user_id);
-        // Notification::send($user, new ApplicationStatusUpdate($application)); // Notifikasi ke kandidat
+        
 
         return redirect()->route('admin.applications.index')->with('success', 'Application status updated.');
     }
+
+    public function accept(Request $request, $id)
+    {
+        $application = Application::findOrFail($id);
+        $application->status = "Accepted";
+        $application->save();
+    
+        return redirect()->route('admin.applications.index')->with('status', 'Aplikasi diterima');
+    }
+    
+    public function reject(Request $request, $id)
+    {
+        $application = Application::findOrFail($id);
+        $application->status = "Rejected";
+        $application->save();
+    
+        return redirect()->route('admin.applications.index')->with('status', 'Aplikasi ditolak');
+    }
+    
+
+
 }
