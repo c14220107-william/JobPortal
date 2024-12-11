@@ -11,8 +11,8 @@
             <select name="status" id="status" class="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring-green-300">
                 <option value="">All</option>
                 <option value="on_process" {{ request('status') == 'on_process' ? 'selected' : '' }}>On Process</option>
-                <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>Accepted</option>
-                <option value="not_accepted" {{ request('status') == 'not_accepted' ? 'selected' : '' }}>Not Accepted</option>
+                <option value="Accepted" {{ request('status') == 'Accepted' ? 'selected' : '' }}>Accepted</option>
+                <option value="Rejected" {{ request('status') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
             </select>
             <button type="submit" class="ml-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                 Apply Filter
@@ -42,10 +42,10 @@
                     <td class="py-3 px-6 text-center">
                         @if ($application->status == 'on_process')
                         <span class="bg-yellow-500 text-white py-1 px-3 rounded-full text-xs">On Process</span>
-                        @elseif ($application->status == 'accepted')
+                        @elseif ($application->status == 'Accepted')
                         <span class="bg-green-500 text-white py-1 px-3 rounded-full text-xs">Accepted</span>
-                        @else
-                        <span class="bg-red-500 text-white py-1 px-3 rounded-full text-xs">Not Accepted</span>
+                        @elseif ($application->status == 'Rejected')
+                        <span class="bg-red-500 text-white py-1 px-3 rounded-full text-xs">Rejected</span>
                         @endif
                     </td>
                 </tr>

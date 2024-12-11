@@ -19,6 +19,7 @@
                     @if (Auth::check())
                         <a class="text-gray-600 hover:text-gray-900" href="{{ route('job_vacancies.index') }}">Job</a>
                         <a class="text-gray-600 hover:text-gray-900" href="{{ route('profile') }}">Profile</a>
+                        <a class="text-gray-600 hover:text-gray-900" href="{{ route('applications.myApplications') }}">Applications</a>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="text-gray-600 hover:text-gray-900">Logout</button>
