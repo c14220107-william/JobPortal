@@ -58,7 +58,6 @@ class ApplicationController extends Controller
                 'Message' => $message,
                 'Subject' => 'New Job Application',
             ]);
-
             // Menambahkan email admin ke subscription SNS jika belum ada
             $this->addEmailToSubscription($snsClient, $email);
         }
@@ -79,6 +78,7 @@ class ApplicationController extends Controller
             $result = $snsClient->listSubscriptionsByTopic([
                 'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
             ]);
+
 
             $existingSubscriptions = $result['Subscriptions'];
             $emailExists = false;
@@ -104,7 +104,7 @@ class ApplicationController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $applications = Application::with('user', 'jobVacancy')->get();
         return view('admin.applications.index', compact('applications'));
@@ -126,6 +126,24 @@ class ApplicationController extends Controller
 
         return redirect()->route('admin.applications.index')->with('success', 'Application status updated.');
     }
+
+
+    public function myApplications(Request $request)
+{
+    // Ambil aplikasi pekerjaan berdasarkan user yang sedang login
+    $query = Application::with('jobVacancy') // Ambil relasi jobVacancy
+                ->where('user_id', Auth::id());
+
+    // Filter berdasarkan status jika ada
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    $applications = $query->orderBy('application_date', 'desc')->get();
+
+    // Kirim data ke view
+    return view('applications.myApplications', compact('applications'));
+}
 
     public function accept(Request $request, $id)
     {

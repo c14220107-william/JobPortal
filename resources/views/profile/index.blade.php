@@ -44,14 +44,14 @@
     
       <div class="mt-20 text-center border-b pb-12">
         <h1 class="text-4xl font-medium text-gray-700">{{$user->name}}</h1>
-        <p class="font-light text-gray-600 mt-3">Bucharest, Romania</p>
+        <p class="font-light text-gray-600 mt-3">Surabaya, Indonesia</p>
     
-        <p class="mt-8 text-gray-500">Solution Manager - Creative Tim Officer</p>
-        <p class="mt-2 text-gray-500">University of Computer Science</p>
+        <p class="mt-8 text-gray-500">Project Manager - Event Organizer Crew</p>
+        <p class="mt-2 text-gray-500">University of PCU</p>
       </div>
     
       <div class="mt-12 flex flex-col justify-center">
-        <p class="text-gray-600 text-center font-light lg:px-16">An artist of considerable range, Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. An artist of considerable range.</p>
+        <p class="text-gray-600 text-center font-light lg:px-16">Orang paling ganteng dan keren sedunia.</p>
         
       </div>
     
