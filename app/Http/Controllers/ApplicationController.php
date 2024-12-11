@@ -14,12 +14,14 @@ use Aws\Sns\SnsClient;
 
 class ApplicationController extends Controller
 {
+
     public function apply(Request $request, $id)
     {
         $request->validate([
             'resume_link' => 'nullable|string|max:1000',
         ]);
 
+        // Simpan aplikasi
         $application = new Application();
         $application->user_id = Auth::id();
         $application->job_vacancies_id = $id;
@@ -29,12 +31,10 @@ class ApplicationController extends Controller
         $application->apply_status = true;
         $application->save();
 
-
-
         // Kirim notifikasi menggunakan SNS
         $jobVacancy = JobVacancy::findOrFail($id);
         $adminEmails = User::where('role', 'admin')->pluck('email')->toArray(); // Dapatkan email admin
-        
+
         $snsClient = new SnsClient([
             'region' => env('AWS_DEFAULT_REGION'),
             'version' => 'latest',
@@ -58,13 +58,50 @@ class ApplicationController extends Controller
                 'Message' => $message,
                 'Subject' => 'New Job Application',
             ]);
+
+            // Menambahkan email admin ke subscription SNS jika belum ada
+            $this->addEmailToSubscription($snsClient, $email);
         }
 
-    
-
-
-
         return redirect()->route('job_vacancies.index')->with('success', 'Your application has been submitted.');
+    }
+
+    /**
+     * Menambahkan email ke subscription SNS jika belum ada
+     *
+     * @param \Aws\Sns\SnsClient $snsClient
+     * @param string $email
+     */
+    private function addEmailToSubscription(SnsClient $snsClient, string $email)
+    {
+        try {
+            // Cek apakah email sudah terdaftar sebagai subscription
+            $result = $snsClient->listSubscriptionsByTopic([
+                'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+            ]);
+
+            $existingSubscriptions = $result['Subscriptions'];
+            $emailExists = false;
+
+            // Periksa apakah email sudah terdaftar
+            foreach ($existingSubscriptions as $subscription) {
+                if ($subscription['Endpoint'] === $email) {
+                    $emailExists = true;
+                    break;
+                }
+            }
+
+            // Jika email belum terdaftar, tambahkan sebagai subscription
+            if (!$emailExists) {
+                $snsClient->subscribe([
+                    'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+                    'Protocol' => 'email', // Menggunakan email sebagai protocol
+                    'Endpoint' => $email, // Email yang akan ditambahkan
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to add email to SNS subscription: ' . $e->getMessage());
+        }
     }
 
     public function index()

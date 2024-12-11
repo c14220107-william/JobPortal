@@ -26,7 +26,7 @@
             <div class="absolute -bottom-20 left-1/2 transform -translate-x-1/2">
                 <div class="w-40 h-40 rounded-full border-4 border-white overflow-hidden bg-white shadow-lg">
                     @if($admin->profile_picture)
-                        <img src="{{ asset('storage/' . $admin->profile_picture) }}" alt="Profile Picture"
+                        <img src="{{Storage::disk('s3')->url($admin->profile_picture)}}" alt="Profile Picture"
                             class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full bg-gray-200 flex items-center justify-center">

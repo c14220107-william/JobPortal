@@ -39,11 +39,12 @@ class AdminController extends Controller
         if ($request->hasFile('profile_picture')) {
             // Delete old profile picture if exists
             if ($admin->profile_picture) {
-                Storage::disk('public')->delete($admin->profile_picture);
+                // Storage::disk('public')->delete($admin->profile_picture);
+                Storage::disk('s3')->delete($admin->profile_picture);
             }
 
             // Store new profile picture
-            $data['profile_picture'] = $request->file('profile_picture')->store('profile-pictures', 'public');
+            $data['profile_picture'] = $request->file('profile_picture')->store('uploads/profile-pictures','s3', 'public');
         }
 
         $admin->update($data);
