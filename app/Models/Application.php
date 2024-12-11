@@ -27,4 +27,9 @@ class Application extends Model
     {
         return $this->belongsTo(JobVacancy::class, 'job_vacancies_id');
     }
+
+    // Casting atribut menjadi DateTime
+    protected $casts = [
+        'application_date' => 'datetime',
+    ];
 }

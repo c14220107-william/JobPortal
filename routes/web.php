@@ -33,6 +33,8 @@ Route::get('/profile-create', [UserController::class, 'editProfile'])->name('pro
 Route::post('/profile-create', [UserController::class, 'store'])->name('profile.store');
 
 
+// Routes untuk my applications
+Route::get('/my-applications', [ApplicationController::class, 'myApplications'])->middleware('auth')->name('applications.myApplications');
 
 
 

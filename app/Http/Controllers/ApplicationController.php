@@ -67,7 +67,7 @@ class ApplicationController extends Controller
         return redirect()->route('job_vacancies.index')->with('success', 'Your application has been submitted.');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $applications = Application::with('user', 'jobVacancy')->get();
         return view('admin.applications.index', compact('applications'));
@@ -91,4 +91,21 @@ class ApplicationController extends Controller
 
         return redirect()->route('admin.applications.index')->with('success', 'Application status updated.');
     }
+
+    public function myApplications(Request $request)
+{
+    // Ambil aplikasi pekerjaan berdasarkan user yang sedang login
+    $query = Application::with('jobVacancy') // Ambil relasi jobVacancy
+                ->where('user_id', Auth::id());
+
+    // Filter berdasarkan status jika ada
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    $applications = $query->orderBy('application_date', 'desc')->get();
+
+    // Kirim data ke view
+    return view('applications.myApplications', compact('applications'));
+}
 }
