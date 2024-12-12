@@ -53,7 +53,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'profile_completed' => 'boolean', // Tambahkan tipe boolean
+        'profile_completed' => 'boolean',
+        'tanggal_lahir' => 'date', // Tambahkan tipe boolean
     ];
 
     /**

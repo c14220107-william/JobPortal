@@ -150,6 +150,37 @@ class ApplicationController extends Controller
         $application = Application::findOrFail($id);
         $application->status = "Accepted";
         $application->save();
+
+        // Kirim notifikasi menggunakan SNS
+        $jobVacancy = JobVacancy::findOrFail($id);
+        $userEmails = User::where('role', 'user')->pluck('email')->toArray();
+
+        $snsClient = new SnsClient([
+            'region' => env('AWS_DEFAULT_REGION'),
+            'version' => 'latest',
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                'token' => env('AWS_SESSION_TOKEN')
+            ],
+        ]);
+
+        $message = sprintf(
+            "Congratulation You Are Accepted to this Company.\n\nJob Title: %s\nCheck Now at http://3.88.74.22/",
+            $jobVacancy->title,
+        );
+
+        foreach ($userEmails as $email) {
+            $snsClient->publish([
+                'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+                'Message' => $message,
+                'Subject' => 'Announcement',
+            ]);
+            // Menambahkan email admin ke subscription SNS jika belum ada
+            $this->addEmailToSubscription($snsClient, $email);
+        }
+
+
     
         return redirect()->route('admin.applications.index')->with('status', 'Aplikasi diterima');
     }
@@ -159,6 +190,35 @@ class ApplicationController extends Controller
         $application = Application::findOrFail($id);
         $application->status = "Rejected";
         $application->save();
+
+        // Kirim notifikasi menggunakan SNS
+        $jobVacancy = JobVacancy::findOrFail($id);
+        $userEmails = User::where('role', 'user')->pluck('email')->toArray();
+
+        $snsClient = new SnsClient([
+            'region' => env('AWS_DEFAULT_REGION'),
+            'version' => 'latest',
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                'token' => env('AWS_SESSION_TOKEN')
+            ],
+        ]);
+
+        $message = sprintf(
+            "Sorry You Are Rejected in This Company.\n\nJob Title: %s\nCheck Now at http://3.88.74.22/",
+            $jobVacancy->title,
+        );
+
+        foreach ($userEmails as $email) {
+            $snsClient->publish([
+                'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+                'Message' => $message,
+                'Subject' => 'Announcement',
+            ]);
+            // Menambahkan email admin ke subscription SNS jika belum ada
+            $this->addEmailToSubscription($snsClient, $email);
+        }
     
         return redirect()->route('admin.applications.index')->with('status', 'Aplikasi ditolak');
     }
