@@ -37,7 +37,7 @@
                         {{ $application->jobVacancy->title }}
                     </td>
                     <td class="py-3 px-6 text-left">
-                        {{ $application->application_date->format('Y-m-d') }}
+                        {{ $application->application_date->format('d-m-Y') }}
                     </td>
                     <td class="py-3 px-6 text-center">
                         @if ($application->status == 'on_process')
