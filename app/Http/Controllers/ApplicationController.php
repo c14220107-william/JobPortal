@@ -104,6 +104,45 @@ class ApplicationController extends Controller
         }
     }
 
+    /**
+     * Menambahkan email ke subscription SNS jika belum ada
+     *
+     * @param \Aws\Sns\SnsClient $snsClient
+     * @param string $email
+     */
+    private function addEmailToSubscription2(SnsClient $snsClient, string $email)
+    {
+        try {
+            // Cek apakah email sudah terdaftar sebagai subscription
+            $result = $snsClient->listSubscriptionsByTopic([
+                'TopicArn' => env('AWS_SNS_TOPIC_ARN2'),
+            ]);
+
+
+            $existingSubscriptions = $result['Subscriptions'];
+            $emailExists = false;
+
+            // Periksa apakah email sudah terdaftar
+            foreach ($existingSubscriptions as $subscription) {
+                if ($subscription['Endpoint'] === $email) {
+                    $emailExists = true;
+                    break;
+                }
+            }
+
+            // Jika email belum terdaftar, tambahkan sebagai subscription
+            if (!$emailExists) {
+                $snsClient->subscribe([
+                    'TopicArn' => env('AWS_SNS_TOPIC_ARN2'),
+                    'Protocol' => 'email', // Menggunakan email sebagai protocol
+                    'Endpoint' => $email, // Email yang akan ditambahkan
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to add email to SNS subscription: ' . $e->getMessage());
+        }
+    }
+
     public function index(Request $request)
     {
         $applications = Application::with('user', 'jobVacancy')->get();
@@ -177,7 +216,7 @@ class ApplicationController extends Controller
                 'Subject' => 'Announcement',
             ]);
             // Menambahkan email admin ke subscription SNS jika belum ada
-            $this->addEmailToSubscription($snsClient, $email);
+            $this->addEmailToSubscription2($snsClient, $email);
         }
 
 
@@ -217,7 +256,7 @@ class ApplicationController extends Controller
                 'Subject' => 'Announcement',
             ]);
             // Menambahkan email admin ke subscription SNS jika belum ada
-            $this->addEmailToSubscription($snsClient, $email);
+            $this->addEmailToSubscription2($snsClient, $email);
         }
     
         return redirect()->route('admin.applications.index')->with('status', 'Aplikasi ditolak');
