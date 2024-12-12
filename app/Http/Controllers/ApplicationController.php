@@ -36,13 +36,13 @@ class ApplicationController extends Controller
         $adminEmails = User::where('role', 'admin')->pluck('email')->toArray(); // Dapatkan email admin
 
         $snsClient = new SnsClient([
-            'region' => env('AWS_DEFAULT_REGION'),
-            'version' => 'latest',
             'credentials' => [
                 'key' => env('AWS_ACCESS_KEY_ID'),
                 'secret' => env('AWS_SECRET_ACCESS_KEY'),
                 'token' => env('AWS_SESSION_TOKEN')
             ],
+            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'version' => 'latest'
         ]);
 
         $message = sprintf(
@@ -115,7 +115,7 @@ class ApplicationController extends Controller
         try {
             // Cek apakah email sudah terdaftar sebagai subscription
             $result = $snsClient->listSubscriptionsByTopic([
-                'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+                'TopicArn' => env('AWS_SNS_TOPIC_ARN2'),
             ]);
 
 
@@ -133,7 +133,7 @@ class ApplicationController extends Controller
             // Jika email belum terdaftar, tambahkan sebagai subscription
             if (!$emailExists) {
                 $snsClient->subscribe([
-                    'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+                    'TopicArn' => env('AWS_SNS_TOPIC_ARN2'),
                     'Protocol' => 'email', // Menggunakan email sebagai protocol
                     'Endpoint' => $email, // Email yang akan ditambahkan
                 ]);
@@ -197,11 +197,11 @@ class ApplicationController extends Controller
 
             $snsClient = new SnsClient([
                 'credentials' => [
-                    'key'    => env('AWS_ACCESS_KEY_ID'),
+                    'key' => env('AWS_ACCESS_KEY_ID'),
                     'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                    'token'  => env('AWS_SESSION_TOKEN')
+                    'token' => env('AWS_SESSION_TOKEN')
                 ],
-                'region'  => env('AWS_DEFAULT_REGION', 'us-east-1'),
+                'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
                 'version' => 'latest'
             ]);
 
@@ -240,11 +240,11 @@ class ApplicationController extends Controller
 
             $snsClient = new SnsClient([
                 'credentials' => [
-                    'key'    => env('AWS_ACCESS_KEY_ID'),
+                    'key' => env('AWS_ACCESS_KEY_ID'),
                     'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                    'token'  => env('AWS_SESSION_TOKEN')
+                    'token' => env('AWS_SESSION_TOKEN')
                 ],
-                'region'  => env('AWS_DEFAULT_REGION', 'us-east-1'),
+                'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
                 'version' => 'latest'
             ]);
 
@@ -266,7 +266,7 @@ class ApplicationController extends Controller
             // Log the error but don't stop the process
             \Log::error('SNS Notification failed: ' . $e->getMessage());
         }
-    
+
         return redirect()->route('admin.applications.index')->with('success', 'Aplikasi berhasil ditolak');
     }
 
