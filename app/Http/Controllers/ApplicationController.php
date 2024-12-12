@@ -161,28 +161,28 @@ class ApplicationController extends Controller
         $application->status = $request->status;
         $application->save();
 
-        
+
 
         return redirect()->route('admin.applications.index')->with('success', 'Application status updated.');
     }
 
 
     public function myApplications(Request $request)
-{
-    // Ambil aplikasi pekerjaan berdasarkan user yang sedang login
-    $query = Application::with('jobVacancy') // Ambil relasi jobVacancy
-                ->where('user_id', Auth::id());
+    {
+        // Ambil aplikasi pekerjaan berdasarkan user yang sedang login
+        $query = Application::with('jobVacancy') // Ambil relasi jobVacancy
+            ->where('user_id', Auth::id());
 
-    // Filter berdasarkan status jika ada
-    if ($request->filled('status')) {
-        $query->where('status', $request->status);
+        // Filter berdasarkan status jika ada
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $applications = $query->orderBy('application_date', 'desc')->get();
+
+        // Kirim data ke view
+        return view('applications.myApplications', compact('applications'));
     }
-
-    $applications = $query->orderBy('application_date', 'desc')->get();
-
-    // Kirim data ke view
-    return view('applications.myApplications', compact('applications'));
-}
 
     public function accept(Request $request, $id)
     {
@@ -191,7 +191,7 @@ class ApplicationController extends Controller
         $application->save();
 
         // Kirim notifikasi menggunakan SNS
-        $jobVacancy = JobVacancy::findOrFail($id);
+        $jobVacancy = $application->jobVacancy;
         $userEmails = User::where('role', 'user')->pluck('email')->toArray();
 
         $snsClient = new SnsClient([
@@ -219,11 +219,9 @@ class ApplicationController extends Controller
             $this->addEmailToSubscription2($snsClient, $email);
         }
 
-
-    
-        return redirect()->route('admin.applications.index')->with('status', 'Aplikasi diterima');
+        return redirect()->route('admin.applications.index')->with('status', 'Aplikasi berhasil diterima');
     }
-    
+
     public function reject(Request $request, $id)
     {
         $application = Application::findOrFail($id);
@@ -231,7 +229,7 @@ class ApplicationController extends Controller
         $application->save();
 
         // Kirim notifikasi menggunakan SNS
-        $jobVacancy = JobVacancy::findOrFail($id);
+        $jobVacancy = $application->jobVacancy;
         $userEmails = User::where('role', 'user')->pluck('email')->toArray();
 
         $snsClient = new SnsClient([
@@ -258,10 +256,10 @@ class ApplicationController extends Controller
             // Menambahkan email admin ke subscription SNS jika belum ada
             $this->addEmailToSubscription2($snsClient, $email);
         }
-    
-        return redirect()->route('admin.applications.index')->with('status', 'Aplikasi ditolak');
+
+        return redirect()->route('admin.applications.index')->with('status', 'Aplikasi berhasil ditolak');
     }
-    
+
 
 
 }
