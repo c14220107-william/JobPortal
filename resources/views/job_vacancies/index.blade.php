@@ -3,7 +3,7 @@
 @section('content')
 <div class="max-w-3xl mx-auto">
     <h1 class="text-3xl font-bold text-gray-800 mb-6" data-aos="fade-right">Available Job Vacancies</h1>
-    <!-- Filter Section -->
+    {{-- <!-- Filter Section -->
     <div class="flex gap-4 mb-6" data-aos="fade-up">
         <!-- Filter by Department -->
         <div>
@@ -43,7 +43,7 @@
                 <option value="Jogja">Jogja</option>
             </select>
         </div>
-    </div>
+    </div> --}}
 
     <div id="jobListings">
         @foreach ($jobVacancies as $job)

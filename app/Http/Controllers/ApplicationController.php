@@ -172,7 +172,7 @@ class ApplicationController extends Controller
 
         foreach ($userEmails as $email) {
             $snsClient->publish([
-                'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+                'TopicArn' => env('AWS_SNS_TOPIC_ARN2'),
                 'Message' => $message,
                 'Subject' => 'Announcement',
             ]);
@@ -212,7 +212,7 @@ class ApplicationController extends Controller
 
         foreach ($userEmails as $email) {
             $snsClient->publish([
-                'TopicArn' => env('AWS_SNS_TOPIC_ARN'),
+                'TopicArn' => env('AWS_SNS_TOPIC_ARN2'),
                 'Message' => $message,
                 'Subject' => 'Announcement',
             ]);
