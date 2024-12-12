@@ -56,8 +56,8 @@
         <a href="{{ route('admin.applications.index')}}" class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
             Kembali ke Daftar Aplikasi
         </a>
+
         
-        {{ dd($application->id) }}
 
         <!-- Tombol Terima -->
         <form action="{{ route('admin.applications.accept', $application->id) }}" method="POST" style="display:inline;">
