@@ -196,6 +196,8 @@ class ApplicationController extends Controller
             // $userEmails = User::where('role', 'user')->pluck('email')->toArray();
             
             $userEmails = $application->user->email;
+
+            dd($application->user->email);
             
             
             $snsClient = new SnsClient([
