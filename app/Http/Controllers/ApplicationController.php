@@ -193,8 +193,11 @@ class ApplicationController extends Controller
         try {
             // Kirim notifikasi menggunakan SNS
             $jobVacancy = $application->jobVacancy;
-            $userEmails = User::where('role', 'user')->pluck('email')->toArray();
-
+            // $userEmails = User::where('role', 'user')->pluck('email')->toArray();
+            
+            $userEmails = $application->user->email;
+            
+            
             $snsClient = new SnsClient([
                 'credentials' => [
                     'key' => env('AWS_ACCESS_KEY_ID'),
@@ -236,7 +239,10 @@ class ApplicationController extends Controller
         try {
             // Kirim notifikasi menggunakan SNS
             $jobVacancy = $application->jobVacancy;
-            $userEmails = User::where('role', 'user')->pluck('email')->toArray();
+            // $userEmails = User::where('role', 'user')->pluck('email')->toArray();
+            $userEmails = $application->user->email;
+
+            
 
             $snsClient = new SnsClient([
                 'credentials' => [
