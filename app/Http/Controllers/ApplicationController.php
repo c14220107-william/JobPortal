@@ -197,7 +197,7 @@ class ApplicationController extends Controller
             
             $userEmails = $application->user->email;
 
-            dd($application->user->email);
+            
             
             
             $snsClient = new SnsClient([
@@ -215,15 +215,15 @@ class ApplicationController extends Controller
                 $jobVacancy->title,
             );
 
-            foreach ($userEmails as $email) {
+            
                 $snsClient->publish([
                     'TopicArn' => env('AWS_SNS_TOPIC_ARN2'),
                     'Message' => $message,
                     'Subject' => 'Announcement',
                 ]);
                 // Menambahkan email admin ke subscription SNS jika belum ada
-                $this->addEmailToSubscription2($snsClient, $email);
-            }
+                $this->addEmailToSubscription2($snsClient, $userEmails);
+            
         } catch (\Exception $e) {
             // Log the error but don't stop the process
             \Log::error('SNS Notification failed: ' . $e->getMessage());
